@@ -66,4 +66,3 @@ class DIV2K(srdata.SRData):
             return idx % len(self.images_hr)
         else:
             return idx
-© 2021 GitHub, Inc.
