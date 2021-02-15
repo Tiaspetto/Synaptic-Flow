@@ -97,9 +97,8 @@ def dataloader(dataset, batch_size, train, workers, length=None):
                           n_colors=n_colors, 
                           rgb_range=rgb_range, 
                           patch_size=patch_size)
-    
-    else：
-    # Dataloader
+    else:
+        # Dataloader
         use_cuda = torch.cuda.is_available()
         kwargs = {'num_workers': workers, 'pin_memory': True} if use_cuda else {}
         shuffle = train is True
