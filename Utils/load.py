@@ -90,7 +90,8 @@ def dataloader(dataset, batch_size, train, workers, length=None):
                 self.ext = 'sep_reset'
                 self.offset_val=800
                 self.n_val = 5
-                self.benchmark_noise=False  
+                self.benchmark_noise=False
+                self.noise = '.'  
         args = Args()
         dataloader = Data(args)
         if train:
