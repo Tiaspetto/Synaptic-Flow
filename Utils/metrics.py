@@ -5,6 +5,7 @@ import pandas as pd
 from prune import * 
 from Layers import layers
 import mmcv
+import cv2
 def summary(model, scores, flops, prunable):
     r"""Summary of compression results for a model.
     """
