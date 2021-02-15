@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data.dataloader import default_collate
 
 class Data:
-    def __init__(self, args):
+    def __init__(self, *args):
         kwargs = {}
         if not args.cpu:
             kwargs['collate_fn'] = default_collate
