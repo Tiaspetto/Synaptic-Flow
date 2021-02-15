@@ -175,7 +175,7 @@ class ResidualGroup(nn.Module):
         return res
 
 class RCAN(nn.Module):
-    def __init__(self, *args, conv=common.default_conv):
+    def __init__(self, *args, conv=default_conv):
         super(RCAN, self).__init__()
         
         n_resgroups = args.n_resgroups
@@ -197,7 +197,7 @@ class RCAN(nn.Module):
             print('Use DIVFlickr2K mean (0.4690, 0.4490, 0.4036)')
             rgb_mean = (0.4690, 0.4490, 0.4036)
         rgb_std = (1.0, 1.0, 1.0)
-        self.sub_mean = common.MeanShift(args.rgb_range, rgb_mean, rgb_std)
+        self.sub_mean = MeanShift(args.rgb_range, rgb_mean, rgb_std)
         
         # define head module
         modules_head = [conv(args.n_colors, n_feats, kernel_size)]
@@ -212,10 +212,10 @@ class RCAN(nn.Module):
 
         # define tail module
         modules_tail = [
-            common.Upsampler(conv, scale, n_feats, act=False),
+            Upsampler(conv, scale, n_feats, act=False),
             conv(n_feats, args.n_colors, kernel_size)]
 
-        self.add_mean = common.MeanShift(args.rgb_range, rgb_mean, rgb_std, 1)
+        self.add_mean = MeanShift(args.rgb_range, rgb_mean, rgb_std, 1)
 
         self.head = nn.Sequential(*modules_head)
         self.body = nn.Sequential(*modules_body)
