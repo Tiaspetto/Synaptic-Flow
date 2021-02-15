@@ -86,6 +86,7 @@ def dataloader(dataset, batch_size, train, workers, length=None):
                 self.n_colors = 3
                 self.rgb_range = 255
                 self.patch_size = 192
+                self.n_train = 800
                 self.ext = 'sep_reset'
         args = Args()
         dataloader = Data(args)
