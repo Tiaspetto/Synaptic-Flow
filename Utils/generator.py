@@ -1,5 +1,5 @@
 from Layers import layers
-
+import torch.nn as nn
 def masks(module):
     r"""Returns an iterator over modules masks, yielding the mask.
     """
@@ -15,7 +15,7 @@ def trainable(module):
 def prunable(module, batchnorm, residual):
     r"""Returns boolean whether a module is prunable.
     """
-    isprunable = isinstance(module, (layers.Linear, layers.Conv2d))
+    isprunable = isinstance(module, (layers.Linear, layers.Conv2d, nn.Conv2d))
     if batchnorm:
         isprunable |= isinstance(module, (layers.BatchNorm1d, layers.BatchNorm2d))
     if residual:
