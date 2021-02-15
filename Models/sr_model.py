@@ -3,11 +3,11 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+from Layers import layers
 from torch.autograd import Variable
 
 def default_conv(in_channels, out_channels, kernel_size, bias=True):
-    return nn.Conv2d(
+    return layers.Conv2d(
         in_channels, out_channels, kernel_size,
         padding=(kernel_size//2), bias=bias)
 
@@ -26,7 +26,7 @@ class BasicBlock(nn.Sequential):
         self, in_channels, out_channels, kernel_size, stride=1, bias=False,
         bn=True, act=nn.ReLU(True)):
 
-        m = [nn.Conv2d(
+        m = [layers.Conv2d(
             in_channels, out_channels, kernel_size,
             padding=(kernel_size//2), stride=stride, bias=bias)
         ]
@@ -81,9 +81,9 @@ class SELayer(nn.Module):
         super(SELayer, self).__init__()
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.conv_du = nn.Sequential(
-                nn.Conv2d(channel, channel // reduction, 1, padding=0, bias=True),
+                layers.Conv2d(channel, channel // reduction, 1, padding=0, bias=True),
                 nn.ReLU(inplace=True),
-                nn.Conv2d(channel // reduction, channel, 1, padding=0, bias=True),
+                layers.Conv2d(channel // reduction, channel, 1, padding=0, bias=True),
                 nn.Sigmoid()
         )
 
@@ -124,9 +124,9 @@ class CALayer(nn.Module):
         super(CALayer, self).__init__()
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.conv_du = nn.Sequential(
-                nn.Conv2d(channel, channel // reduction, 1, padding=0, bias=True),
+                layers.Conv2d(channel, channel // reduction, 1, padding=0, bias=True),
                 nn.ReLU(inplace=True),
-                nn.Conv2d(channel // reduction, channel, 1, padding=0, bias=True),
+                layers.Conv2d(channel // reduction, channel, 1, padding=0, bias=True),
                 nn.Sigmoid()
         )
 
