@@ -90,7 +90,7 @@ class SRData(data.Dataset):
         lr, hr = self._get_patch(lr, hr)
         lr, hr = common.set_channel([lr, hr], self.args.n_colors)
         lr_tensor, hr_tensor = common.np2Tensor([lr, hr], self.args.rgb_range)
-        return lr_tensor, hr_tensor, filename
+        return lr_tensor, hr_tensor
 
     def __len__(self):
         return len(self.images_hr)
