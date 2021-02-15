@@ -10,7 +10,7 @@ import torch.multiprocessing as multiprocessing
 from torch._C import _set_worker_signal_handlers, _set_worker_pids, \
     _remove_worker_pids, _error_if_any_worker_fails
 from torch.utils.data.dataloader import DataLoader
-from torch.utils.data.dataloader import _DataLoaderIter
+from torch.utils.data.dataloader import DataLoaderIter
 
 from torch.utils.data.dataloader import ExceptionWrapper
 from torch.utils.data.dataloader import _use_shared_memory
