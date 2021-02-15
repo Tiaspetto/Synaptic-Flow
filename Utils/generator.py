@@ -20,7 +20,7 @@ def prunable(module, batchnorm, residual):
         isprunable |= isinstance(module, (layers.BatchNorm1d, layers.BatchNorm2d))
     if residual:
         isprunable |= isinstance(module, (layers.Identity1d, layers.Identity2d))
-    print(module, isprunable)
+    #print(module, isprunable)
     return isprunable
 
 def parameters(model):

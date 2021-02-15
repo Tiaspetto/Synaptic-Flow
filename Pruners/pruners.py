@@ -18,7 +18,7 @@ class Pruner:
         #     score[mask == 0.0] = -np.inf
 
         # Threshold scores
-        print(self.masked_parameters, self.scores.values())
+        #print(self.masked_parameters, self.scores.values())
         global_scores = torch.cat([torch.flatten(v) for v in self.scores.values()])
         k = int((1.0 - sparsity) * global_scores.numel())
         if not k < 1:
