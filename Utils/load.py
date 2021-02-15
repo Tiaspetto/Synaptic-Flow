@@ -72,7 +72,7 @@ def dataloader(dataset, batch_size, train, workers, length=None):
     if dataset == 'div2k':
         class Args:
             def __init__(self):
-                self.home = str(Path.home())
+                home = str(Path.home())
                 self.dir_data = os.path.join(home, 'srprunner/dataset')
                 self.dir_data_test = os.path.join(home, 'srprunner/dataset')
                 self.data_train = 'DIV2K'
