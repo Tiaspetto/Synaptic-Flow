@@ -88,6 +88,7 @@ def dataloader(dataset, batch_size, train, workers, length=None):
                 self.patch_size = 192
                 self.n_train = 800
                 self.ext = 'sep_reset'
+                self.benchmark_noise=False  
         args = Args()
         dataloader = Data(args)
     else:
