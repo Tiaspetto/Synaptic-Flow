@@ -19,9 +19,9 @@ class Data:
             trainset = getattr(module_train, args.data_train)(args)
             self.loader_train = DataLoader(
                 trainset,
-                batch_size=self.args.batch_size,
+                batch_size=args.batch_size,
                 shuffle=True,
-                pin_memory=not self.args.cpu,
+                pin_memory=not args.cpu,
                 drop_last=True
             )
 
@@ -40,4 +40,4 @@ class Data:
             module_test = import_module('data.' +  args.data_test.lower())
             testset = getattr(module_test, args.data_test)(args, train=False)
 
-        self.loader_test = DataLoader(testset, batch_size=self.args.n_GPUs, shuffle=False, pin_memory=not self.args.cpu)
+        self.loader_test = DataLoader(testset, batch_size=args.n_GPUs, shuffle=False, pin_memory=not args.cpu)
