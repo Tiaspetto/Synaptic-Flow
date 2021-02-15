@@ -1,4 +1,5 @@
 import torch
+from data import Data
 import numpy as np
 from torchvision import datasets, transforms
 import torch.optim as optim
@@ -10,24 +11,18 @@ from Models import tinyimagenet_resnet
 from Models import imagenet_vgg
 from Models import imagenet_resnet
 from Pruners import pruners
+from Models import sr_model
 from Utils import custom_datasets
-
+from pathlib import Path 
+import os
 def device(gpu):
     use_cuda = torch.cuda.is_available()
     return torch.device(("cuda:" + str(gpu)) if use_cuda else "cpu")
 
 def dimension(dataset):
-    if dataset == 'mnist':
-        input_shape, num_classes = (1, 28, 28), 10
-    if dataset == 'cifar10':
-        input_shape, num_classes = (3, 32, 32), 10
-    if dataset == 'cifar100':
-        input_shape, num_classes = (3, 32, 32), 100
-    if dataset == 'tiny-imagenet':
-        input_shape, num_classes = (3, 64, 64), 200
-    if dataset == 'imagenet':
-        input_shape, num_classes = (3, 224, 224), 1000
-    return input_shape, num_classes
+    if dataset == 'div2k':
+        input_shape, output_shape = (3, 320, 180), (3, 1280, 720)
+    return input_shape, output_shape
 
 def get_transform(size, padding, mean, std, preprocess):
     transform = []
@@ -74,19 +69,39 @@ def dataloader(dataset, batch_size, train, workers, length=None):
                 transforms.Normalize(mean, std)])
         folder = 'Data/imagenet_raw/{}'.format('train' if train else 'val')
         dataset = datasets.ImageFolder(folder, transform=transform)
+    if dataset == 'div2k':
+        home = str(Path.home())
+        dir_data = os.path.join(home, 'srprunner/dataset')
+        dir_data_test = os.path.join(home, 'srprunner/dataset')
+        data_train = 'DIV2K'
+        data_test = 'Urban100'
+        test_only = False
+        batch_size = 8
+        cpu = False
+        n_GPUs = 1
+        scale = 4
+        test_every = 1000
+        n_colors = 3
+        rgb_range = 255
+        patch_size = 192
+        dataloader = Data(dir_data=dir_data, dir_data_test=dir_data_test, data_train=data_train, 
+                            data_test=data_test, test_only=test_only, batch_size=batch_size
+                            cpu=cpu, n_GPUs=n_GPUs, scale=scale, test_every=test_every, 
+                            n_colors=n_colors, rgb_range=rgb_range, patch_size=patch_size)
     
+    else：
     # Dataloader
-    use_cuda = torch.cuda.is_available()
-    kwargs = {'num_workers': workers, 'pin_memory': True} if use_cuda else {}
-    shuffle = train is True
-    if length is not None:
-        indices = torch.randperm(len(dataset))[:length]
-        dataset = torch.utils.data.Subset(dataset, indices)
+        use_cuda = torch.cuda.is_available()
+        kwargs = {'num_workers': workers, 'pin_memory': True} if use_cuda else {}
+        shuffle = train is True
+        if length is not None:
+            indices = torch.randperm(len(dataset))[:length]
+            dataset = torch.utils.data.Subset(dataset, indices)
 
-    dataloader = torch.utils.data.DataLoader(dataset=dataset, 
-                                             batch_size=batch_size, 
-                                             shuffle=shuffle, 
-                                             **kwargs)
+        dataloader = torch.utils.data.DataLoader(dataset=dataset, 
+                                                batch_size=batch_size, 
+                                                shuffle=shuffle, 
+                                                **kwargs)
 
     return dataloader
 
@@ -154,11 +169,16 @@ def model(model_architecture, model_class):
         'wide-resnet50' : imagenet_resnet.wide_resnet50_2,
         'wide-resnet101' : imagenet_resnet.wide_resnet101_2,
     }
+    sr_models = {
+        'rcan' : sr_model.rcan
+    }
+
     models = {
         'default' : default_models,
         'lottery' : lottery_models,
         'tinyimagenet' : tinyimagenet_models,
         'imagenet' : imagenet_models
+        'srmodel' : sr_models
     }
     if model_class == 'imagenet':
         print("WARNING: ImageNet models do not implement `dense_classifier`.")

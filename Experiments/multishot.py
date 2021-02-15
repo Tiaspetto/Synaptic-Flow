@@ -19,17 +19,29 @@ def run(args):
 
     ## Data ##
     print('Loading {} dataset.'.format(args.dataset))
-    input_shape, num_classes = load.dimension(args.dataset) 
-    prune_loader = load.dataloader(args.dataset, args.prune_batch_size, True, args.workers, args.prune_dataset_ratio * num_classes)
+    input_shape, output_shape = load.dimension(args.dataset) 
+    prune_loader = load.dataloader(args.dataset, args.prune_batch_size, True, args.workers)
     train_loader = load.dataloader(args.dataset, args.train_batch_size, True, args.workers)
     test_loader = load.dataloader(args.dataset, args.test_batch_size, False, args.workers)
 
     ## Model ##
     print('Creating {} model.'.format(args.model))
-    model = load.model(args.model, args.model_class)(input_shape, 
-                                                     num_classes, 
-                                                     args.dense_classifier,
-                                                     args.pretrained).to(device)
+    n_resgroups = 10
+    n_resblocks = 20
+    n_feats = 64
+    reduction = 16
+    data_train = 'DIV2K'
+    rgb_range = 255
+    n_colors = 3
+    res_scale = 1
+    model = load.model(args.model, args.model_class)(n_resgroups=n_resgroups, 
+                                                     n_resblocks=n_resblocks, 
+                                                     n_feats=n_feats, 
+                                                     reduction=reduction,
+                                                     data_train=data_train,
+                                                     rgb_range=rgb_range,
+                                                     n_colors=n_colors,
+                                                     res_scale=res_scale).to(device)
     loss = nn.CrossEntropyLoss()
     opt_class, opt_kwargs = load.optimizer(args.optimizer)
     optimizer = opt_class(generator.parameters(model), lr=args.lr, weight_decay=args.weight_decay, **opt_kwargs)
