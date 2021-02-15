@@ -25,13 +25,19 @@ def eval(model, loss, dataloader, device, verbose):
     total = 0
     total_ssim = 0
     total_psnr = 0
+    class Args:
+        def __init__(self):
+            self.rgb_range = 255
+            self.scale = 4
+            self.converty = True
+    args = Args()
     with torch.no_grad():
         for data, target in dataloader:
             data, target = data.to(device), target.to(device)
             output = model(data)
             total += loss(output, target).item() * data.size(0)
-            total_ssim += calc_ssim(output, target)
-            total_psnr += calc_psnr(output, target)
+            total_ssim += calc_ssim(args, output, target)
+            total_psnr += calc_psnr(args, output, target)
 
     average_loss = total / len(dataloader.dataset)
     average_ssim = total_ssim / len(dataloader.dataset)
