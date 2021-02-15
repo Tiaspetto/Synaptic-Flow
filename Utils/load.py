@@ -185,7 +185,7 @@ def model(model_architecture, model_class):
         'default' : default_models,
         'lottery' : lottery_models,
         'tinyimagenet' : tinyimagenet_models,
-        'imagenet' : imagenet_models
+        'imagenet' : imagenet_models,
         'srmodel' : sr_models
     }
     if model_class == 'imagenet':
