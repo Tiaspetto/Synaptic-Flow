@@ -39,6 +39,7 @@ class DIV2K(srdata.SRData):
         self.apath = dir_data
         self.dir_hr = os.path.join(self.apath, 'DIV2K_train_HR')
         self.dir_lr = os.path.join(self.apath, 'DIV2K_train_LR_bicubic')
+        print(self.dir_hr)
         self.ext = '.png'
 
     def _name_hrbin(self):
