@@ -175,9 +175,10 @@ class ResidualGroup(nn.Module):
         return res
 
 class RCAN(nn.Module):
-    def __init__(self, **args, conv=default_conv):
+    def __init__(self, **args):
         super(RCAN, self).__init__()
         
+        conv=default_conv
         n_resgroups = args.n_resgroups
         n_resblocks = args.n_resblocks
         n_feats = args.n_feats
