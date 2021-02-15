@@ -93,6 +93,10 @@ def dataloader(dataset, batch_size, train, workers, length=None):
                 self.benchmark_noise=False  
         args = Args()
         dataloader = Data(args)
+        if train:
+            dataloader = dataloader.loader_train
+        else:
+            dataloader = dataloader.loader_test
     else:
         # Dataloader
         use_cuda = torch.cuda.is_available()

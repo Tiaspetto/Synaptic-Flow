@@ -2,7 +2,7 @@ import torch
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
-
+from Utils.metrics import calc_ssim, calc_psnr
 def train(model, loss, optimizer, dataloader, device, epoch, verbose, log_interval=10):
     model.train()
     total = 0
@@ -23,35 +23,34 @@ def train(model, loss, optimizer, dataloader, device, epoch, verbose, log_interv
 def eval(model, loss, dataloader, device, verbose):
     model.eval()
     total = 0
-    correct1 = 0
-    correct5 = 0
+    total_ssim = 0
+    total_psnr = 0
     with torch.no_grad():
         for data, target in dataloader:
             data, target = data.to(device), target.to(device)
             output = model(data)
             total += loss(output, target).item() * data.size(0)
-            _, pred = output.topk(5, dim=1)
-            correct = pred.eq(target.view(-1, 1).expand_as(pred))
-            correct1 += correct[:,:1].sum().item()
-            correct5 += correct[:,:5].sum().item()
+            total_ssim += calc_ssim(output, target)
+            total_psnr += calc_psnr(output, target)
+
     average_loss = total / len(dataloader.dataset)
-    accuracy1 = 100. * correct1 / len(dataloader.dataset)
-    accuracy5 = 100. * correct5 / len(dataloader.dataset)
+    average_ssim = total_ssim / len(dataloader.dataset)
+    average_psnr = total_psnr / len(dataloader.dataset)
     if verbose:
-        print('Evaluation: Average loss: {:.4f}, Top 1 Accuracy: {}/{} ({:.2f}%)'.format(
-            average_loss, correct1, len(dataloader.dataset), accuracy1))
-    return average_loss, accuracy1, accuracy5
+        print('Evaluation: Average loss: {:.4f}, PSNR: {}/{} ({:.2f}%)'.format(
+            average_loss, average_psnr, len(dataloader.dataset), average_psnr))
+    return average_loss, average_psnr, average_ssim
 
 def train_eval_loop(model, loss, optimizer, scheduler, train_loader, test_loader, device, epochs, verbose):
-    test_loss, accuracy1, accuracy5 = eval(model, loss, test_loader, device, verbose)
-    rows = [[np.nan, test_loss, accuracy1, accuracy5]]
+    test_loss, average_psnr, average_ssim = eval(model, loss, test_loader, device, verbose)
+    rows = [[np.nan, test_loss, average_psnr, average_ssim]]
     for epoch in tqdm(range(epochs)):
         train_loss = train(model, loss, optimizer, train_loader, device, epoch, verbose)
-        test_loss, accuracy1, accuracy5 = eval(model, loss, test_loader, device, verbose)
-        row = [train_loss, test_loss, accuracy1, accuracy5]
+        test_loss, average_psnr, average_ssim = eval(model, loss, test_loader, device, verbose)
+        row = [train_loss, test_loss, average_psnr, average_ssim]
         scheduler.step()
         rows.append(row)
-    columns = ['train_loss', 'test_loss', 'top1_accuracy', 'top5_accuracy']
+    columns = ['train_loss', 'test_loss', 'psnr', 'ssim']
     return pd.DataFrame(rows, columns=columns)
 
 
