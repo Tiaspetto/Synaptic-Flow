@@ -4,7 +4,7 @@ from data import common
 
 import numpy as np
 import scipy.misc as misc
-
+import imageio
 import torch
 import torch.utils.data as data
 
@@ -32,12 +32,12 @@ class SRData(data.Dataset):
             if args.ext.find('reset') >= 0:
                 print('Preparing seperated binary files')
                 for v in self.images_hr:
-                    hr = misc.imread(v)
+                    hr = imageio.imread(v)
                     name_sep = v.replace(self.ext, '.npy')
                     np.save(name_sep, hr)
                 for si, s in enumerate(self.scale):
                     for v in self.images_lr[si]:
-                        lr = misc.imread(v)
+                        lr = imageio.imread(v)
                         name_sep = v.replace(self.ext, '.npy')
                         np.save(name_sep, lr)
 
@@ -62,11 +62,11 @@ class SRData(data.Dataset):
                     os.mkdir(bin_path)
 
                 list_hr, list_lr = self._scan()
-                hr = [misc.imread(f) for f in list_hr]
+                hr = [imageio.imread(f) for f in list_hr]
                 np.save(self._name_hrbin(), hr)
                 del hr
                 for si, s in enumerate(self.scale):
-                    lr_scale = [misc.imread(f) for f in list_lr[si]]
+                    lr_scale = [imageio.imread(f) for f in list_lr[si]]
                     np.save(self._name_lrbin(s), lr_scale)
                     del lr_scale
                 _load_bin()
@@ -104,8 +104,8 @@ class SRData(data.Dataset):
         hr = self.images_hr[idx]
         if self.args.ext == 'img' or self.benchmark:
             filename = hr
-            lr = misc.imread(lr)
-            hr = misc.imread(hr)
+            lr = imageio.imread(lr)
+            hr = imageio.imread(hr)
         elif self.args.ext.find('sep') >= 0:
             filename = hr
             lr = np.load(lr)
