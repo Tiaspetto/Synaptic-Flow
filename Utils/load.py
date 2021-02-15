@@ -70,33 +70,24 @@ def dataloader(dataset, batch_size, train, workers, length=None):
         folder = 'Data/imagenet_raw/{}'.format('train' if train else 'val')
         dataset = datasets.ImageFolder(folder, transform=transform)
     if dataset == 'div2k':
-        home = str(Path.home())
-        dir_data = os.path.join(home, 'srprunner/dataset')
-        dir_data_test = os.path.join(home, 'srprunner/dataset')
-        data_train = 'DIV2K'
-        data_test = 'Urban100'
-        test_only = False
-        batch_size = 8
-        cpu = False
-        n_GPUs = 1
-        scale = 4
-        test_every = 1000
-        n_colors = 3
-        rgb_range = 255
-        patch_size = 192
-        dataloader = Data(dir_data=dir_data, 
-                          dir_data_test=dir_data_test, 
-                          data_train=data_train, 
-                          data_test=data_test, 
-                          test_only=test_only, 
-                          batch_size=batch_size,
-                          cpu=cpu, 
-                          n_GPUs=n_GPUs, 
-                          scale=scale, 
-                          test_every=test_every, 
-                          n_colors=n_colors, 
-                          rgb_range=rgb_range, 
-                          patch_size=patch_size)
+        class Args:
+            def __init__(self):
+                self.home = str(Path.home())
+                self.dir_data = os.path.join(home, 'srprunner/dataset')
+                self.dir_data_test = os.path.join(home, 'srprunner/dataset')
+                self.data_train = 'DIV2K'
+                self.data_test = 'Urban100'
+                self.test_only = False
+                self.batch_size = 8
+                self.cpu = False
+                self.n_GPUs = 1
+                self.scale = 4
+                self.test_every = 1000
+                self.n_colors = 3
+                self.rgb_range = 255
+                self.patch_size = 192
+        args = Args()
+        dataloader = Data(args)
     else:
         # Dataloader
         use_cuda = torch.cuda.is_available()

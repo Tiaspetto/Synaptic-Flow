@@ -26,22 +26,18 @@ def run(args):
 
     ## Model ##
     print('Creating {} model.'.format(args.model))
-    n_resgroups = 10
-    n_resblocks = 20
-    n_feats = 64
-    reduction = 16
-    data_train = 'DIV2K'
-    rgb_range = 255
-    n_colors = 3
-    res_scale = 1
-    model = load.model(args.model, args.model_class)(n_resgroups=n_resgroups, 
-                                                     n_resblocks=n_resblocks, 
-                                                     n_feats=n_feats, 
-                                                     reduction=reduction,
-                                                     data_train=data_train,
-                                                     rgb_range=rgb_range,
-                                                     n_colors=n_colors,
-                                                     res_scale=res_scale).to(device)
+    class Args:
+        def __init__(self):
+            self.n_resgroups = 10
+            self.n_resblocks = 20
+            self.n_feats = 64
+            self.reduction = 16
+            self.data_train = 'DIV2K'
+            self.rgb_range = 255
+            self.n_colors = 3
+            self.res_scale = 1
+    init_args = Args()
+    model = load.model(args.model, args.model_class)(init_args).to(device)
     loss = nn.CrossEntropyLoss()
     opt_class, opt_kwargs = load.optimizer(args.optimizer)
     optimizer = opt_class(generator.parameters(model), lr=args.lr, weight_decay=args.weight_decay, **opt_kwargs)
