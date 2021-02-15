@@ -84,10 +84,19 @@ def dataloader(dataset, batch_size, train, workers, length=None):
         n_colors = 3
         rgb_range = 255
         patch_size = 192
-        dataloader = Data(dir_data=dir_data, dir_data_test=dir_data_test, data_train=data_train, 
-                            data_test=data_test, test_only=test_only, batch_size=batch_size
-                            cpu=cpu, n_GPUs=n_GPUs, scale=scale, test_every=test_every, 
-                            n_colors=n_colors, rgb_range=rgb_range, patch_size=patch_size)
+        dataloader = Data(dir_data=dir_data, 
+                          dir_data_test=dir_data_test, 
+                          data_train=data_train, 
+                          data_test=data_test, 
+                          test_only=test_only, 
+                          batch_size=batch_size,
+                          cpu=cpu, 
+                          n_GPUs=n_GPUs, 
+                          scale=scale, 
+                          test_every=test_every, 
+                          n_colors=n_colors, 
+                          rgb_range=rgb_range, 
+                          patch_size=patch_size)
     
     else：
     # Dataloader
