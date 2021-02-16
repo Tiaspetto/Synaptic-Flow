@@ -11,7 +11,7 @@ def train(model, loss, optimizer, dataloader, device, epoch, verbose, log_interv
         optimizer.zero_grad()
         output = model(data)
         train_loss = loss(output, target)
-        total += train_loss.item() * data.size(0)
+        total += train_loss.item()
         train_loss.backward()
         optimizer.step()
         if verbose & (batch_idx % log_interval == 0):
@@ -35,7 +35,7 @@ def eval(model, loss, dataloader, device, verbose):
         for data, target in dataloader:
             data, target = data.to(device), target.to(device)
             output = model(data)
-            total += loss(output, target).item() * data.size(0)
+            total += loss(output, target).item()
             total_ssim += calc_ssim(args, output, target)
             total_psnr += calc_psnr(args, output, target)
 
