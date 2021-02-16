@@ -41,6 +41,7 @@ def eval(model, loss, dataloader, device, verbose):
 
     average_loss = total / len(dataloader.dataset)
     average_ssim = total_ssim / len(dataloader.dataset)
+    average_ssim = 1 - average_ssim
     average_psnr = total_psnr / len(dataloader.dataset)
     if verbose:
         print('Evaluation: Average loss: {:.4f}, PSNR: {}/{} ({:.2f}%)'.format(
