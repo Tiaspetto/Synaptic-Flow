@@ -38,7 +38,7 @@ def run(args):
             self.res_scale = 1
     init_args = Args()
     model = load.model(args.model, args.model_class)(init_args).to(device)
-    loss = nn.MSELoss()
+    loss = nn.L1Loss()
     opt_class, opt_kwargs = load.optimizer(args.optimizer)
     optimizer = opt_class(generator.parameters(model), lr=args.lr, weight_decay=args.weight_decay, **opt_kwargs)
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=args.lr_drops, gamma=args.lr_drop_rate)
