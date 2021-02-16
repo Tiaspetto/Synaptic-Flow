@@ -33,6 +33,7 @@ def eval(model, loss, dataloader, device, verbose):
     args = Args()
     with torch.no_grad():
         for data, target in dataloader:
+            print(target.item())
             data, target = data.to(device), target.to(device)
             output = model(data)
             total += loss(output, target).item()

@@ -134,6 +134,7 @@ def _ssim(img1, img2):
 
     img1 = img1.astype(np.float64)
     img2 = img2.astype(np.float64)
+    print(img1, img2)
     kernel = cv2.getGaussianKernel(11, 1.5)
     window = np.outer(kernel, kernel.transpose())
 
