@@ -205,7 +205,7 @@ def pruner(method):
 
 def optimizer(optimizer):
     optimizers = {
-        'adam' : (optim.Adam, {}),
+        'adam' : (optim.Adam, {'betas':(0.9, 0.999), 'eps':1e-8}),
         'sgd' : (optim.SGD, {}),
         'momentum' : (optim.SGD, {'momentum' : 0.9, 'nesterov' : True}),
         'rms' : (optim.RMSprop, {})

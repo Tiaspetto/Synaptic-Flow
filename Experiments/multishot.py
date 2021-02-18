@@ -30,7 +30,7 @@ def run(args):
         def __init__(self):
             self.n_resgroups = 10
             self.n_resblocks = 20
-            self.n_feats = 64
+            self.n_feats = 32
             self.reduction = 16
             self.data_train = 'DIV2K'
             self.rgb_range = 255
