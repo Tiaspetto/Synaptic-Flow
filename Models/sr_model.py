@@ -197,7 +197,7 @@ class RCAN(nn.Module):
             print('Use DIVFlickr2K mean (0.4690, 0.4490, 0.4036)')
             rgb_mean = (0.4690, 0.4490, 0.4036)
         rgb_std = (1.0, 1.0, 1.0)
-        self.sub_mean = MeanShift(args.rgb_range, rgb_mean, rgb_std)
+        #self.sub_mean = MeanShift(args.rgb_range, rgb_mean, rgb_std)
         
         # define head module
         modules_head = [conv(args.n_colors, n_feats, kernel_size)]
@@ -222,7 +222,7 @@ class RCAN(nn.Module):
         self.tail = nn.Sequential(*modules_tail)
 
     def forward(self, x):
-        x = self.sub_mean(x)
+        #x = self.sub_mean(x)
         x = self.head(x)
 
         res = self.body(x)
