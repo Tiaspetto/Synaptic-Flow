@@ -219,7 +219,7 @@ def calc_psnr(args,
     """
 
     img1 = img1[0].data.mul(255.0 / args.rgb_range).cpu().numpy()
-    print(np.amax(img1), np.amin(img1))
+    #print(np.amax(img1), np.amin(img1))
     img2 = img2[0].data.mul(255.0 / args.rgb_range).cpu().numpy()
 
     assert img1.shape == img2.shape, (
