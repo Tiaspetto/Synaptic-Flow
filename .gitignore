@@ -141,3 +141,5 @@ hyperopt/logs/*.txt
 Data/
 
 # experiments
+Results
+
